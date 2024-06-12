@@ -108,4 +108,33 @@ def main(treated_baseline_path, treated_6months_path, treated_12months_path,
     # Obliczenie zmian objętości hipokampu dla pacjentów leczonych
     treated_changes_6m = [treated_volumes_6months[i] - treated_volumes_baseline[i] for i in
                           range(len(treated_volumes_baseline))]
-    treated_changes_12m = [treated_volumes_12months[i]
+    treated_changes_12m = [treated_volumes_12months[i] - treated_volumes_baseline[i] for i in
+                           range(len(treated_volumes_baseline))]
+
+    # Obliczenie zmian objętości hipokampu dla pacjentów kontrolnych
+    control_changes_6m = [control_volumes_6months[i] - control_volumes_baseline[i] for i in
+                          range(len(control_volumes_baseline))]
+    control_changes_12m = [control_volumes_12months[i] - control_volumes_baseline[i] for i in
+                           range(len(control_volumes_baseline))]
+
+    # Przeprowadzenie testu t dla porównania zmian objętości hipokampu między grupami
+    t_stat_6m, p_value_6m = ttest_ind(treated_changes_6m, control_changes_6m)
+    t_stat_12m, p_value_12m = ttest_ind(treated_changes_12m, control_changes_12m)
+
+    # Wyświetlenie wyników testów t
+    print(f"6 miesięcy: t={t_stat_6m}, p={p_value_6m}")
+    print(f"12 miesięcy: t={t_stat_12m}, p={p_value_12m}")
+
+if __name__ == "__main__":
+    # Ścieżki do folderów z obrazami MRI dla różnych grup i okresów czasowych
+    treated_baseline_path = "/path/to/treated/baseline/"
+    treated_6months_path = "/path/to/treated/6months/"
+    treated_12months_path = "/path/to/treated/12months/"
+
+    control_baseline_path = "/path/to/control/baseline/"
+    control_6months_path = "/path/to/control/6months/"
+    control_12months_path = "/path/to/control/12months/"
+
+    # Uruchomienie głównej funkcji
+    main(treated_baseline_path, treated_6months_path, treated_12months_path,
+         control_baseline_path, control_6months_path, control_12months_path)
